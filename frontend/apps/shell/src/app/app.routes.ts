@@ -3,6 +3,7 @@ import { Route } from '@angular/router';
 
 const ROUTES = {
   INPUTS: 'inputs',
+  QUOTE: 'quote'
 };
 
 export const appRoutes: Route[] = [
@@ -14,6 +15,10 @@ export const appRoutes: Route[] = [
   {
     path: ROUTES.INPUTS,
     loadChildren: () => loadRemoteModule('mfeInputs', './mfe'),
+  },
+  {
+    path: ROUTES.QUOTE,
+    loadChildren: () => loadRemoteModule('mfeQuote', './mfe'),
   },
   {
     path: '**',

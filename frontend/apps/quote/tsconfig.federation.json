@@ -8,11 +8,7 @@
     "src/main.ts"
   ],
   "include": [
-    "src/**/*.d.ts",
-    "..\\..\\libs\\http-interception-lib\\src\\index.ts",
-    "..\\..\\libs\\input-lib\\src\\index.ts",
-    "..\\..\\..\\shared\\interfaces\\src\\index.ts",
-    "..\\..\\..\\shared\\validations\\src\\index.ts"
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "jest.config.ts",

@@ -7,6 +7,6 @@ module.exports = withNativeFederation({
   ...baseConfig,
   name: 'mfe-quote',
   exposes: {
-    './mfe': '',
+    './mfe': './frontend/libs/quote-lib/src/index.ts',
   },
 });

@@ -32,6 +32,7 @@ const initialState: UiState = {
       einmalbeitrag: 0,
       beitragsdynamik: ''
     },
+    id: ''
   },
   [InputStatePropertiesEnum.Geburtstag]: {
     value: null,
@@ -77,6 +78,7 @@ export const InputStore = signalStore(
 
         const quote = await lastValueFrom(quoteService.calculateQuote(quoteDto as QuoteRequestDto));
 
+        debugger;
         patchState(store, { uiState: { ...store.uiState(), quote } });
       } catch (error) {
         console.error(error);

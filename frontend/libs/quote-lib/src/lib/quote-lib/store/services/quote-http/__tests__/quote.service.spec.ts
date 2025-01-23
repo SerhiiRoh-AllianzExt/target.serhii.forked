@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { QuoteRequestDto, QuoteResponseDto } from '@target/interfaces';
+import { QuoteResponseDto } from '@target/interfaces';
 import { firstValueFrom, of, throwError } from 'rxjs';
 
 import { QuoteService } from '../quote.service';
 
 describe('QuoteService', () => {
   let service: QuoteService;
-  let httpClient: { post: jest.Mock };
+  let httpClient: { get: jest.Mock };
 
   beforeEach(() => {
-    httpClient = { post: jest.fn() };
+    httpClient = { get: jest.fn() };
     TestBed.configureTestingModule({
       providers: [
         QuoteService,
@@ -25,15 +25,8 @@ describe('QuoteService', () => {
   });
 
   describe('calculateQuote', () => {
-    it('should call the correct endpoint with quote request data', async () => {
-      const mockRequest: QuoteRequestDto = {
-        beitrag: 1000,
-        laufzeit: 12,
-        leistungsVorgabe: 'Beitrag',
-        berechnungDerLaufzeit: 'Alter bei Rentenbeginn',
-        beitragszahlungsweise: 'Monatliche Beiträge',
-        geburtstag: new Date(1998,12,4)
-      };
+    it('should call the correct endpoint with quote id query param', async () => {
+      const mockRequestId = 'mockTestId';
       const mockResponse: QuoteResponseDto = {
         basisdaten: {
           geburtsdatum: '1990-01-01',
@@ -51,33 +44,27 @@ describe('QuoteService', () => {
         beitrag: {
           einmalbeitrag: 0,
           beitragsdynamik: '1,5%'
-        }
+        },
+        id: ''
       };
 
-      httpClient.post.mockReturnValue(of(mockResponse));
+      httpClient.get.mockReturnValue(of(mockResponse));
 
-      const response = await firstValueFrom(service.calculateQuote(mockRequest));
+      const response = await firstValueFrom(service.getQuote(mockRequestId));
 
       expect(response).toEqual(mockResponse);
-      expect(httpClient.post).toHaveBeenCalledWith('/api/quote', mockRequest);
+      expect(httpClient.get).toHaveBeenCalledWith('/api/quote', { params: { quoteId: mockRequestId }});
     });
 
     it('should propagate errors from the API', async () => {
-      const mockRequest: QuoteRequestDto = {
-        beitrag: 1000,
-        laufzeit: 12,
-        leistungsVorgabe: 'Beitrag',
-        berechnungDerLaufzeit: 'Alter bei Rentenbeginn',
-        beitragszahlungsweise: 'Monatliche Beiträge',
-        geburtstag: new Date(1998,12,4)
-      };
+      const mockRequestId = 'mockTestId';
       const errorResponse = new Error('API Error');
 
-      httpClient.post.mockReturnValue(throwError(() => errorResponse));
+      httpClient.get.mockReturnValue(throwError(() => errorResponse));
 
-      await expect(firstValueFrom(service.calculateQuote(mockRequest)))
+      await expect(firstValueFrom(service.getQuote(mockRequestId)))
         .rejects.toBe(errorResponse);
-      expect(httpClient.post).toHaveBeenCalledWith('/api/quote', mockRequest);
+      expect(httpClient.get).toHaveBeenCalledWith('/api/quote', { params: { quoteId: mockRequestId }});
     });
   });
 });

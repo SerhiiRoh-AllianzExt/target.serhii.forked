@@ -57,9 +57,9 @@ export class InputLibComponent {
   async calculate(): Promise<void> {
     try {
       this.calculateProcess.set(true);
-      await this.inputStore.calculate();
+      const calculatedQuoteId = await this.inputStore.calculate();
 
-      this.navigator.toQuote(this.inputStore.uiState().quote.id);
+      this.navigator.toQuote(calculatedQuoteId);
     } finally {
       this.calculateProcess.set(false);
     }
